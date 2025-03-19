@@ -18,13 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.serelik.moviedbcompose.navigation.BooksAppNavigation
-import com.serelik.surfbooks.data.BottomNavigationScreens
+import com.serelik.surfbooks.navigation.BottomNavigationScreens
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-
-
 
     val bottomNavigationItems = listOf(
         BottomNavigationScreens.Search,
@@ -78,8 +76,8 @@ fun RowScope.AddItem(
         alwaysShowLabel = true,
         onClick = { navController.navigate(screen.route) },
         colors = NavigationBarItemColors(
-            selectedTextColor = Color.Blue,
-            selectedIconColor = Color.Blue,
+            selectedTextColor = Color.Cyan,
+            selectedIconColor = Color.Cyan,
             selectedIndicatorColor = Color.Transparent,
             unselectedIconColor = Color.Gray,
             unselectedTextColor = Color.Gray,

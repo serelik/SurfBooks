@@ -1,4 +1,4 @@
-package com.serelik.surfbooks.data
+package com.serelik.surfbooks.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -12,9 +12,9 @@ sealed class BottomNavigationScreens(
     @StringRes val resourceId: Int,
     val icon: ImageVector
 ) {
-    object Search :
+    data object Search :
         BottomNavigationScreens("Search", R.string.search_screen_route, Icons.Default.Search)
 
-    object Favorite :
+    data object Favorite :
         BottomNavigationScreens("Favorite", R.string.favorite_screen_route, Icons.Filled.Favorite)
 }
