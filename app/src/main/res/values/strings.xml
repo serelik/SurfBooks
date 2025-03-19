@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SurfBooks</string>
+    <string name="search_screen_route">Search</string>
+    <string name="favorite_screen_route">Favorite</string>
 </resources>
