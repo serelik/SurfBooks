@@ -12,13 +12,19 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.serelik.moviedbcompose.navigation.BooksAppNavigation
 import com.serelik.surfbooks.navigation.BottomNavigationScreens
+import com.serelik.surfbooks.ui.theme.LightBlue
 
 @Composable
 fun MainScreen() {
@@ -63,24 +69,28 @@ fun RowScope.AddItem(
     navController: NavHostController
 
 ) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     NavigationBarItem(
         label = {
             Text(text = screen.route)
         },
 
         icon = {
-            Icon(screen.icon, screen.route)
+            val imageVector = ImageVector.vectorResource(screen.icon)
+            Icon(imageVector, screen.route)
         },
 
-        selected = true,
+        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
         alwaysShowLabel = true,
         onClick = { navController.navigate(screen.route) },
         colors = NavigationBarItemColors(
-            selectedTextColor = Color.Cyan,
-            selectedIconColor = Color.Cyan,
+            selectedTextColor = LightBlue,
+            selectedIconColor = LightBlue,
             selectedIndicatorColor = Color.Transparent,
-            unselectedIconColor = Color.Gray,
-            unselectedTextColor = Color.Gray,
+            unselectedIconColor = Color.LightGray,
+            unselectedTextColor = Color.LightGray,
             disabledIconColor = Color.Black,
             disabledTextColor = Color.Black,
         )

@@ -9,9 +9,9 @@ import com.serelik.moviedbcompose.navigation.destination.toSearchList
 
 @Composable
 fun BooksAppNavigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "Search") {
+    NavHost(navController = navController, startDestination = "Поиск") {
         this.toSearchList(
-            // onBookClick = { navController.navigate(route = "details") }
+            navController
         )
 
         this.toDetailsList()

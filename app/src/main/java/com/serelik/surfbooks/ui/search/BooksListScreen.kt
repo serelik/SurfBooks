@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.serelik.surfbooks.R
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.domain.models.BookList
@@ -58,7 +59,8 @@ import com.skydoves.landscapist.glide.GlideImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BooksListScreen(
-    viewModel: BookSearchViewModel = hiltViewModel()
+    viewModel: BookSearchViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val uiState = viewModel.booksStateFlow.collectAsStateWithLifecycle()
     val queryState = viewModel.searchQuery.collectAsStateWithLifecycle()
@@ -109,23 +111,23 @@ fun BooksListScreen(
 
 
 
-        UiStateHandler(uiState.value)
+        UiStateHandler(uiState.value, navController)
     }
 }
 
 @Composable
-fun UiStateHandler(uiState: BookSearchUiState) {
+fun UiStateHandler(uiState: BookSearchUiState, navController: NavHostController) {
     when (uiState) {
         BookSearchUiState.EmptyQuery -> EmptyQuery("Введите название книги, которую ищете")
         BookSearchUiState.EmptyResult -> EmptyResult("По вашему запросу ничего не найдено")
         BookSearchUiState.Error -> ErrorSearch("Ошибка выполнения запроса, попробуйте повторить")
         BookSearchUiState.Loading -> Loader()
-        is BookSearchUiState.Result -> SuccessResult(uiState.bookList)
+        is BookSearchUiState.Result -> SuccessResult(uiState.bookList, navController)
     }
 }
 
 @Composable
-fun SuccessResult(bookList: BookList) {
+fun SuccessResult(bookList: BookList, navController: NavHostController) {
 
 
     LazyVerticalGrid(
@@ -137,7 +139,7 @@ fun SuccessResult(bookList: BookList) {
     ) {
 
         items(bookList.items) {
-            BookItemUi(it)
+            BookItemUi(it, navController = navController)
         }
     }
 }
@@ -209,9 +211,16 @@ fun Loader() {
 
 @Composable
 fun BookItemUi(
-    bookItem: BookItem
+    bookItem: BookItem,
+    navController: NavHostController
 ) {
-    Column(modifier = Modifier.defaultMinSize(minHeight = 200.dp)) {
+    Column(
+        modifier = Modifier
+            .defaultMinSize(minHeight = 200.dp)
+            .clickable {
+                navController.navigate("Details/${bookItem.id}")
+            }
+    ) {
         Card() {
             Box() {
                 bookItem.imageUrl?.let {
@@ -229,18 +238,19 @@ fun BookItemUi(
                 val color = if (selected) Color.Red else Color.LightGray
 
 
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        tint = color,
-                        contentDescription = "favorite",
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(top = 6.dp, end = 10.dp)
-                            .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
-                            .padding(6.dp)
-                            .clickable {  selected = !selected
-                            }
-                    )
+                Icon(
+                    imageVector = Icons.Filled.Favorite,
+                    tint = color,
+                    contentDescription = "favorite",
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = 6.dp, end = 10.dp)
+                        .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
+                        .padding(6.dp)
+                        .clickable {
+                            selected = !selected
+                        }
+                )
             }
         }
 

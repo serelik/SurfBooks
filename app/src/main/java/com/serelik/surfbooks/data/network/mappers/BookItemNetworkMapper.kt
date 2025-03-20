@@ -19,13 +19,14 @@ class BookItemNetworkMapper @Inject constructor() {
             model.volumeInfo.publishedDate
         }
 
-            return BookItem(
-                id = model.id ?: return null,
-                title = model.volumeInfo.title?: return null,
-                authors = model.volumeInfo.authors?: return null,
-                publishedYear = publishedYear.orEmpty(),
-                imageUrl = convertImage(model.volumeInfo.imageLinks?.thumbnail)
-            )
+        return BookItem(
+            id = model.id ?: return null,
+            title = model.volumeInfo.title ?: return null,
+            authors = model.volumeInfo.authors ?: return null,
+            description = model.volumeInfo.description ?: return null,
+            publishedYear = publishedYear.orEmpty(),
+            imageUrl = convertImage(model.volumeInfo.imageLinks?.thumbnail)
+        )
     }
 
     private fun convertImage(imageUrl: String?): String? {

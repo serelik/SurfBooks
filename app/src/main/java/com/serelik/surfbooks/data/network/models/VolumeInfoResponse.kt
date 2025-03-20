@@ -11,6 +11,8 @@ class VolumeInfoResponse(
     val authors: List<String>? = null,
     @SerialName("publishedDate")
     val publishedDate: String? = null,
+    @SerialName("description")
+    val description: String? = null,
     @SerialName("imageLinks")
     val imageLinks: ImageLinksResponse? = null
 )
