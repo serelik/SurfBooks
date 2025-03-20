@@ -16,6 +16,6 @@ fun BooksAppNavigation(navController: NavHostController) {
 
         this.toDetailsList(onBackClick = navController::popBackStack)
 
-        this.toFavoriteList()
+        this.toFavoriteList(navController)
     }
 }

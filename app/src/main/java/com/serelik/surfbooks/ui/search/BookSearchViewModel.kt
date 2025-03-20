@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookSearchViewModel @Inject constructor(
-    val bookRepository: BookRepository
+    private val bookRepository: BookRepository
 ) : ViewModel() {
 
     private val _booksStateFlow = MutableStateFlow<BookSearchUiState>(BookSearchUiState.EmptyQuery)
@@ -60,8 +60,6 @@ class BookSearchViewModel @Inject constructor(
             }
 
         }
-
-
 
 
     }
