@@ -15,7 +15,7 @@ const val ID_KEY = "id"
 fun NavGraphBuilder.toSearchList(navHostController: NavHostController) {
     composable("Поиск") {
         BooksListScreen(
-            navController = navHostController
+            onItemClick = navHostController::navigateToBookDetails
         )
     }
 }

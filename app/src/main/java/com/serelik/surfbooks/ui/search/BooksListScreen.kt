@@ -45,10 +45,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.serelik.surfbooks.R
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.domain.models.BookList
+import com.serelik.surfbooks.ui.common.BookItemUi
+import com.serelik.surfbooks.ui.favorite.BookItemUiModel
 import com.serelik.surfbooks.ui.theme.Typography
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -56,7 +59,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun BooksListScreen(
     viewModel: BookSearchViewModel = hiltViewModel(),
-    navController: NavHostController
+    onItemClick: (id: String) -> Unit
 ) {
     val uiState = viewModel.booksStateFlow.collectAsStateWithLifecycle()
     val queryState = viewModel.searchQuery.collectAsStateWithLifecycle()
@@ -92,8 +95,6 @@ fun BooksListScreen(
                                 modifier = Modifier.clickable {
                                     viewModel.onQueryChange("")
                                 })
-                        } else {
-                            null
                         }
                     },
                 )
@@ -103,23 +104,43 @@ fun BooksListScreen(
             content = { },
         )
 
-        UiStateHandler(uiState.value, navController)
+        UiStateHandler(
+            uiState.value,
+            onItemClick,
+            viewModel::onFavoriteClick,
+            viewModel::retrySearch
+        )
     }
 }
 
 @Composable
-fun UiStateHandler(uiState: BookSearchUiState, navController: NavHostController) {
+fun UiStateHandler(
+    uiState: BookSearchUiState,
+    onItemClick: (id: String) -> Unit,
+    onFavoriteClick: (book: BookItemUiModel) -> Unit,
+    onRetryClick: () -> Unit
+) {
     when (uiState) {
         BookSearchUiState.EmptyQuery -> EmptyQuery("Введите название книги, которую ищете")
         BookSearchUiState.EmptyResult -> EmptyResult("По вашему запросу ничего не найдено")
-        BookSearchUiState.Error -> ErrorSearch("Ошибка выполнения запроса, попробуйте повторить")
+        BookSearchUiState.Error -> ErrorSearch(
+            "Ошибка выполнения запроса, попробуйте повторить",
+            onRetryClick
+        )
+
         BookSearchUiState.Loading -> Loader()
-        is BookSearchUiState.Result -> SuccessResult(uiState.bookList, navController)
+        is BookSearchUiState.Result -> SuccessResult(
+            uiState.bookList, onItemClick, onFavoriteClick
+        )
     }
 }
 
 @Composable
-fun SuccessResult(bookList: BookList, navController: NavHostController) {
+fun SuccessResult(
+    books: List<BookItemUiModel>,
+    onItemClick: (id: String) -> Unit,
+    onFavoriteClick: (book: BookItemUiModel) -> Unit,
+) {
 
 
     LazyVerticalGrid(
@@ -130,8 +151,12 @@ fun SuccessResult(bookList: BookList, navController: NavHostController) {
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        items(bookList.items) {
-            BookItemUi(it, navController = navController)
+        items(books) {
+            BookItemUi(
+                bookItemUiModel = it,
+                onItemClick = onItemClick,
+                onFavoriteClick = onFavoriteClick
+            )
         }
     }
 }
@@ -157,7 +182,7 @@ fun EmptyResult(message: String) {
 }
 
 @Composable
-fun ErrorSearch(message: String) {
+fun ErrorSearch(message: String, onRetryClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize(),
@@ -172,7 +197,7 @@ fun ErrorSearch(message: String) {
             )
         )
         Button(
-            onClick = {},
+            onClick = { onRetryClick() },
             modifier = Modifier.align(Alignment.CenterHorizontally),
             enabled = true,
             shape = Shapes().small,
@@ -191,66 +216,6 @@ fun Loader() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
-    }
-}
-
-
-@Composable
-fun BookItemUi(
-    bookItem: BookItem,
-    navController: NavHostController
-) {
-    Column(
-        modifier = Modifier
-            .defaultMinSize(minHeight = 200.dp)
-            .clickable {
-                navController.navigate("Details/${bookItem.id}")
-            }
-    ) {
-        Card() {
-            Box() {
-                bookItem.imageUrl?.let {
-                    GlideImage(
-                        it,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(154.0f / 230.0f),
-                        contentDescription = null
-                    )
-                }
-
-                var selected by remember { mutableStateOf(false) }
-                val color = if (selected) Color.Red else Color.LightGray
-
-
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    tint = color,
-                    contentDescription = "favorite",
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 6.dp, end = 10.dp)
-                        .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
-                        .padding(6.dp)
-                        .clickable {
-                            selected = !selected
-                        }
-                )
-            }
-        }
-
-        Text(
-            text = bookItem.authors.joinToString(),
-            style = Typography.bodyLarge,
-            color = Color.LightGray,
-            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-        )
-
-        Text(
-            bookItem.title,
-            style = Typography.bodyLarge,
-        )
     }
 }
 
