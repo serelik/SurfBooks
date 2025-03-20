@@ -3,8 +3,7 @@ package com.serelik.surfbooks.data.network.repository
 import com.serelik.surfbooks.data.network.BooksApi
 import com.serelik.surfbooks.data.network.mappers.BookItemNetworkMapper
 import com.serelik.surfbooks.data.network.mappers.BookListNetworkMapper
-import com.serelik.surfbooks.data.network.models.BookItemResponse
-import com.serelik.surfbooks.domain.BookRepository
+import com.serelik.surfbooks.domain.repository.BookRepository
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.domain.models.BookList
 import javax.inject.Inject

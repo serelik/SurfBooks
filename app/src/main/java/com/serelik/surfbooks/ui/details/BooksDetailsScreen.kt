@@ -2,7 +2,6 @@ package com.serelik.surfbooks.ui.details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
@@ -38,26 +36,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import com.serelik.surfbooks.domain.models.BookItem
-import com.serelik.surfbooks.ui.search.ErrorSearch
-import com.serelik.surfbooks.ui.search.Loader
 import com.serelik.surfbooks.ui.theme.Typography
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun BooksDetailsScreen(
+    onBackClick: () -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel(),
 ) {
 
     val bookDetailsState = viewModel.bookDetailsStateFlow.collectAsStateWithLifecycle()
+    val isBookFavoriteState = viewModel.bookFavoriteStateFlow.collectAsStateWithLifecycle()
 
-    UiStateHandler(bookDetailsState.value)
+    val bookState = bookDetailsState.value
 
-}
-
-@Composable
-fun SuccessResult(book: BookItem) {
 
     Column(
         modifier = Modifier
@@ -73,88 +66,113 @@ fun SuccessResult(book: BookItem) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "",
-                modifier = Modifier.padding(top = 4.dp)
-                    .clickable { }
-            )
-
-
-            var selected by remember { mutableStateOf(false) }
-            val color = if (selected) Color.Red else Color.LightGray
-
-            Icon(
-                imageVector = Icons.Filled.Favorite,
-                tint = color,
-                contentDescription = "favorite",
                 modifier = Modifier
-                    .shadow(shape = ShapeDefaults.ExtraLarge, elevation = 10.dp)
-                    .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
-                    .padding(6.dp)
+                    .padding(top = 4.dp)
                     .clickable {
-                        selected = !selected
+                        onBackClick()
                     }
+            )
 
+            FavoriteIcon(
+                bookState = bookState,
+                isBookFavorite = isBookFavoriteState.value,
+                onFavoriteClick = viewModel::onFavoriteClick
             )
 
         }
 
+        UiStateHandler(bookState)
+    }
+}
 
-        Card(modifier = Modifier.padding(horizontal = 80.dp, vertical = 12.dp)) {
-            book.imageUrl?.let {
-                GlideImage(
-                    it,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
+@Composable
+fun FavoriteIcon(
+    bookState: BookDetailsUiState,
+    isBookFavorite: Boolean,
+    onFavoriteClick: (BookItem) -> Unit
+) {
+    if (bookState !is BookDetailsUiState.Result)
+        return
 
-                        .aspectRatio(200.0f / 300.0f),
-                    contentDescription = null
-                )
+    val color = if (isBookFavorite) Color.Red else Color.LightGray
+
+    Icon(
+        imageVector = Icons.Filled.Favorite,
+        tint = color,
+        contentDescription = "favorite",
+        modifier = Modifier
+            .shadow(shape = ShapeDefaults.ExtraLarge, elevation = 10.dp)
+            .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
+            .padding(6.dp)
+            .clickable {
+                onFavoriteClick(bookState.bookItem)
             }
-        }
 
-        Text(
-            text = book.authors.joinToString(),
-            style = Typography.bodyLarge,
-            modifier = Modifier.fillMaxWidth(),
-            color = Color.LightGray,
-            textAlign = TextAlign.Center
-        )
+    )
 
-        Text(
-            text = book.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            style = Typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold
-        )
+}
 
-        Text(
-            text = "${book.publishedYear} г.",
-            style = Typography.bodySmall,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 22.dp, top = 8.dp),
-            color = Color.LightGray,
-            textAlign = TextAlign.Center
-        )
-        Card() {
-            Text(
-                text = "Описание",
-                style = Typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp, top = 20.dp)
+@Composable
+fun SuccessResult(book: BookItem) {
+
+
+    Card(modifier = Modifier.padding(horizontal = 80.dp, vertical = 12.dp)) {
+        book.imageUrl?.let {
+            GlideImage(
+                it,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+
+                    .aspectRatio(200.0f / 300.0f),
+                contentDescription = null
             )
-
-            Text(
-                text = book.description,
-                style = Typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-            )
-
         }
     }
+
+    Text(
+        text = book.authors.joinToString(),
+        style = Typography.bodyLarge,
+        modifier = Modifier.fillMaxWidth(),
+        color = Color.LightGray,
+        textAlign = TextAlign.Center
+    )
+
+    Text(
+        text = book.title,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        style = Typography.bodyLarge,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold
+    )
+
+    Text(
+        text = "${book.publishedYear} г.",
+        style = Typography.bodySmall,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 22.dp, top = 8.dp),
+        color = Color.LightGray,
+        textAlign = TextAlign.Center
+    )
+    Card() {
+        Text(
+            text = "Описание",
+            style = Typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp, top = 20.dp)
+        )
+
+        Text(
+            text = book.description,
+            style = Typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+        )
+
+    }
+
 }
 
 @Composable

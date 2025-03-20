@@ -25,7 +25,7 @@ fun NavGraphBuilder.toFavoriteList() {
     }
 }
 
-fun NavGraphBuilder.toDetailsList() {
+fun NavGraphBuilder.toDetailsList(onBackClick: () -> Unit,) {
 
 
     composable(
@@ -36,6 +36,6 @@ fun NavGraphBuilder.toDetailsList() {
         }
     )) {
 
-        BooksDetailsScreen()
+        BooksDetailsScreen(onBackClick)
     }
 }

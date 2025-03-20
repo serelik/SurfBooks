@@ -2,7 +2,7 @@ package com.serelik.surfbooks.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.serelik.surfbooks.domain.BookRepository
+import com.serelik.surfbooks.domain.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
