@@ -76,4 +76,9 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(libs.landscapist.glide)
+
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
+
 }

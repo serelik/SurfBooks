@@ -1,5 +1,6 @@
 package com.serelik.surfbooks.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,10 @@ import com.serelik.surfbooks.ui.theme.LightBlue
 fun MainScreen() {
     val navController = rememberNavController()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+
+
     val bottomNavigationItems = listOf(
         BottomNavigationScreens.Search,
         BottomNavigationScreens.Favorite,
@@ -39,7 +44,12 @@ fun MainScreen() {
         contentWindowInsets = WindowInsets.ime,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            BooksAppBottomNavigation(navController, bottomNavigationItems)
+
+            Log.d("navigation checker", navBackStackEntry?.destination?.route.toString())
+            if (navBackStackEntry?.destination?.route?.startsWith("Details") == false) {
+                BooksAppBottomNavigation(navController, bottomNavigationItems)
+            }
+
         },
     ) { padding ->
         Modifier.padding(padding)

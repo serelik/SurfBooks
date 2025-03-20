@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.ui.search.ErrorSearch
 import com.serelik.surfbooks.ui.search.Loader
@@ -73,6 +74,7 @@ fun SuccessResult(book: BookItem) {
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "",
                 modifier = Modifier.padding(top = 4.dp)
+                    .clickable { }
             )
 
 
