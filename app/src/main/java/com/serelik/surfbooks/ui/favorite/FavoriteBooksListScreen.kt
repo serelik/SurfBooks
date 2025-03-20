@@ -78,7 +78,7 @@ fun SuccessResult(
     LazyVerticalGrid(
         GridCells.Fixed(2),
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, top = 12.dp),
+            .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {

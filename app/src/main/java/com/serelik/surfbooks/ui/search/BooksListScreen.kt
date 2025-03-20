@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,7 +47,8 @@ fun BooksListScreen(
 ) {
     val uiState = viewModel.booksStateFlow.collectAsStateWithLifecycle()
     val queryState = viewModel.searchQuery.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column {
         SearchBar(
@@ -58,7 +60,7 @@ fun BooksListScreen(
                     query = queryState.value,
                     onQueryChange = viewModel::onQueryChange,
                     onSearch = {
-                        Toast.makeText(context, "OnSearchCall", Toast.LENGTH_SHORT).show()
+                        keyboardController?.hide()
                     },
                     expanded = false,
                     onExpandedChange = { },
@@ -126,7 +128,7 @@ fun SuccessResult(
     LazyVerticalGrid(
         GridCells.Fixed(2),
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, top = 12.dp),
+            .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
