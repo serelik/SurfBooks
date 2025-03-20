@@ -8,6 +8,6 @@ class BookListNetworkMapper @Inject constructor(private val bookItemMapper: Book
     fun convert(model: BooksListResponse): BookList =
         BookList(
             model.totalItems,
-            model.items.orEmpty().map(bookItemMapper::convert)
+            model.items.orEmpty().mapNotNull(bookItemMapper::convert)
         )
 }

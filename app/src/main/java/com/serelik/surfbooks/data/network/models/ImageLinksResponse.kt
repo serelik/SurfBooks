@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ImageLinksResponse(
     @SerialName("smallThumbnail")
-    val smallThumbnail: String?,
+    val smallThumbnail: String? = null,
     @SerialName("thumbnail")
-    val thumbnail: String?
+    val thumbnail: String? = null
 )

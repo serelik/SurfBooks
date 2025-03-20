@@ -3,7 +3,7 @@ package com.serelik.moviedbcompose.navigation.destination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.serelik.surfbooks.ui.BooksDetailsScreen
-import com.serelik.surfbooks.ui.BooksListScreen
+import com.serelik.surfbooks.ui.search.BooksListScreen
 import com.serelik.surfbooks.ui.FavoriteBooksListScreen
 
 

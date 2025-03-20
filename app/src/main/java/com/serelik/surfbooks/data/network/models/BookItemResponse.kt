@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BookItemResponse(
     @SerialName("id")
-    val id: String,
+    val id: String?,
     @SerialName("volumeInfo")
-    val volumeInfo: VolumeInfoResponse
+    val volumeInfo: VolumeInfoResponse? = null
 )
