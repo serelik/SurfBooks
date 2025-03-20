@@ -1,6 +1,5 @@
 package com.serelik.surfbooks.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,8 +31,6 @@ fun MainScreen() {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-
-
     val bottomNavigationItems = listOf(
         BottomNavigationScreens.Search,
         BottomNavigationScreens.Favorite,
@@ -44,19 +40,15 @@ fun MainScreen() {
         contentWindowInsets = WindowInsets.ime,
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-
-            Log.d("navigation checker", navBackStackEntry?.destination?.route.toString())
             if (navBackStackEntry?.destination?.route?.startsWith("Details") == false) {
                 BooksAppBottomNavigation(navController, bottomNavigationItems)
             }
-
         },
     ) { padding ->
         Modifier.padding(padding)
         BooksAppNavigation(navController)
     }
 }
-
 
 @Composable
 private fun BooksAppBottomNavigation(
@@ -77,21 +69,17 @@ private fun BooksAppBottomNavigation(
 fun RowScope.AddItem(
     screen: BottomNavigationScreens,
     navController: NavHostController
-
 ) {
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     NavigationBarItem(
         label = {
             Text(text = screen.route)
         },
-
         icon = {
             val imageVector = ImageVector.vectorResource(screen.icon)
             Icon(imageVector, screen.route)
         },
-
         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
         alwaysShowLabel = true,
         onClick = { navController.navigate(screen.route) },
@@ -105,10 +93,4 @@ fun RowScope.AddItem(
             disabledTextColor = Color.Black,
         )
     )
-}
-
-@Preview
-@Composable
-fun MainScreePreview() {
-    MainScreen()
 }

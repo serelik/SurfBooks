@@ -23,9 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import com.serelik.surfbooks.domain.models.BookItem
-import com.serelik.surfbooks.domain.models.BookList
 import com.serelik.surfbooks.ui.common.BookItemUi
 
 @Composable
@@ -69,8 +66,6 @@ fun FavoriteBooksListScreen(
             onFavoriteClick = viewModel::onFavoriteClick,
         )
     }
-
-
 }
 
 @Composable
@@ -91,11 +86,4 @@ fun SuccessResult(
             BookItemUi(it, onItemClick, onFavoriteClick)
         }
     }
-}
-
-
-@Composable
-@Preview
-fun FavoriteBooksListComponentPreview() {
-
 }

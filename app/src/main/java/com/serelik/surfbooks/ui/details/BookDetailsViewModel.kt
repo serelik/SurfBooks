@@ -28,10 +28,8 @@ class BookDetailsViewModel @Inject constructor(
         MutableStateFlow<Boolean>(false)
     val bookFavoriteStateFlow = _bookFavoriteStateFlow.asStateFlow()
 
-
     private val bookId: String =
         savedStateHandle.get<String>(ID_KEY) ?: error("movieId must be not null")
-
 
     init {
         getBook()
@@ -43,7 +41,6 @@ class BookDetailsViewModel @Inject constructor(
             try {
                 val bookItem = bookRepository.getBook(bookId)
                 _bookDetailsStateFlow.emit(BookDetailsUiState.Result(bookItem))
-
             } catch (e: Exception) {
                 _bookDetailsStateFlow.emit(BookDetailsUiState.Error)
             }
@@ -59,7 +56,6 @@ class BookDetailsViewModel @Inject constructor(
     }
 
     fun onFavoriteClick(book: BookItem) {
-
         val isFavorite = bookFavoriteStateFlow.value
         viewModelScope.launch {
             _bookFavoriteStateFlow.emit(!isFavorite)
@@ -68,7 +64,6 @@ class BookDetailsViewModel @Inject constructor(
             else
                 addToFavorite(book = book)
         }
-
     }
 
     private suspend fun addToFavorite(book: BookItem) {

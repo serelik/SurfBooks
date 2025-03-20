@@ -16,6 +16,4 @@ object DbContract {
         const val COLUMN_NAME_AUTHORS = "authors"
         const val COLUMN_NAME_TIMESTAMP = "timestamp"
     }
-
-
 }

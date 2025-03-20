@@ -22,7 +22,5 @@ class FavoriteListViewModel @Inject constructor(
         viewModelScope.launch {
             favoriteBookRepository.deleteById(book.bookItem.id)
         }
-
     }
-
 }

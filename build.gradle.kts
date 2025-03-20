@@ -5,6 +5,4 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     id("com.google.dagger.hilt.android") version "2.49" apply false
     id("org.jetbrains.kotlin.plugin.serialization") version "1.4.21" apply false
-    id("org.jetbrains.kotlin.plugin.parcelize") version "2.0.21" apply false
-
 }

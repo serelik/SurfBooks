@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,12 +36,13 @@ class BookSearchViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    private var isFavoriteSets = emptySet<String>()
+
     init {
         debounceSearch.filter { it.isNotEmpty() }
             .debounce(2000L)
             .onEach(::searchBooks)
             .launchIn(viewModelScope)
-
 
         _favoriteBooksStateFlow
             .onEach {
@@ -61,7 +61,7 @@ class BookSearchViewModel @Inject constructor(
         }
     }
 
-   private fun updateSearchResultIfNeeded() {
+    private fun updateSearchResultIfNeeded() {
         val books = booksStateFlow.value
 
         if (books !is BookSearchUiState.Result)
@@ -75,15 +75,9 @@ class BookSearchViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-
             _booksStateFlow.emit(BookSearchUiState.Result(newList))
-
         }
-
-
     }
-
-    var isFavoriteSets = emptySet<String>()
 
     private fun mapBookList(bookList: BookList): List<BookItemUiModel> {
         return bookList.items.map {
@@ -92,11 +86,9 @@ class BookSearchViewModel @Inject constructor(
     }
 
     private fun searchBooks(query: String) {
-
         searchJob?.cancel()
 
         searchJob = viewModelScope.launch {
-
             _booksStateFlow.emit(BookSearchUiState.Loading)
 
             try {
@@ -107,14 +99,10 @@ class BookSearchViewModel @Inject constructor(
             } catch (e: Exception) {
                 _booksStateFlow.emit(BookSearchUiState.Error)
             }
-
         }
-
-
     }
 
     fun onFavoriteClick(book: BookItemUiModel) {
-
         val isFavorite = book.isFavorite
         viewModelScope.launch {
             if (isFavorite)
@@ -122,7 +110,6 @@ class BookSearchViewModel @Inject constructor(
             else
                 addToFavorite(book = book.bookItem)
         }
-
     }
 
     private suspend fun addToFavorite(book: BookItem) {
@@ -136,5 +123,4 @@ class BookSearchViewModel @Inject constructor(
     fun retrySearch() {
         searchBooks(debounceSearch.value)
     }
-
 }

@@ -15,7 +15,6 @@ interface FavoriteBooksDao {
     @Query("SELECT _id FROM favorite_books")
     fun loadAllFavoriteBookIds(): Flow<List<String>>
 
-
     @Query("SELECT * FROM favorite_books WHERE _id = :bookId")
     suspend fun loadById(bookId: String): BookEntity?
 
@@ -24,5 +23,4 @@ interface FavoriteBooksDao {
 
     @Query("DELETE FROM favorite_books WHERE _id = :bookId")
     suspend fun deleteById(bookId: String)
-
 }

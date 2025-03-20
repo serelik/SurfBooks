@@ -6,8 +6,6 @@ import com.serelik.surfbooks.data.database.BooksAppDatabase
 import com.serelik.surfbooks.data.database.dao.FavoriteBooksDao
 import com.serelik.surfbooks.data.database.entities.DbContract
 import com.serelik.surfbooks.data.database.repository.FavoriteBookRepositoryImpl
-import com.serelik.surfbooks.data.network.repository.BookRepositoryImpl
-import com.serelik.surfbooks.domain.repository.BookRepository
 import com.serelik.surfbooks.domain.repository.FavoriteBookRepository
 import dagger.Binds
 import dagger.Module
@@ -41,5 +39,4 @@ abstract class DatabaseModule {
 
     @Binds
     abstract fun bindFavoriteBookRepository(repository: FavoriteBookRepositoryImpl): FavoriteBookRepository
-
 }

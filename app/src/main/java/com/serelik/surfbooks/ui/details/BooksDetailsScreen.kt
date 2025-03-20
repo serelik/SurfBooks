@@ -21,10 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -45,12 +41,10 @@ fun BooksDetailsScreen(
     onBackClick: () -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel(),
 ) {
-
     val bookDetailsState = viewModel.bookDetailsStateFlow.collectAsStateWithLifecycle()
     val isBookFavoriteState = viewModel.bookFavoriteStateFlow.collectAsStateWithLifecycle()
 
     val bookState = bookDetailsState.value
-
 
     Column(
         modifier = Modifier
@@ -78,7 +72,6 @@ fun BooksDetailsScreen(
                 isBookFavorite = isBookFavoriteState.value,
                 onFavoriteClick = viewModel::onFavoriteClick
             )
-
         }
 
         UiStateHandler(bookState)
@@ -107,22 +100,17 @@ fun FavoriteIcon(
             .clickable {
                 onFavoriteClick(bookState.bookItem)
             }
-
     )
-
 }
 
 @Composable
 fun SuccessResult(book: BookItem) {
-
-
     Card(modifier = Modifier.padding(horizontal = 80.dp, vertical = 12.dp)) {
         book.imageUrl?.let {
             GlideImage(
                 it,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-
                     .aspectRatio(200.0f / 300.0f),
                 contentDescription = null
             )
@@ -156,7 +144,7 @@ fun SuccessResult(book: BookItem) {
         color = Color.LightGray,
         textAlign = TextAlign.Center
     )
-    Card() {
+    Card {
         Text(
             text = "Описание",
             style = Typography.bodyLarge,
@@ -170,9 +158,7 @@ fun SuccessResult(book: BookItem) {
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
         )
-
     }
-
 }
 
 @Composable
@@ -211,10 +197,4 @@ fun ErrorSearch(message: String) {
             )
         )
     }
-}
-
-@Composable
-@Preview
-fun BooksDetailsComponentPreview() {
-
 }

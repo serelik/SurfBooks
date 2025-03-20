@@ -6,10 +6,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-
 class BookItemNetworkMapper @Inject constructor() {
     fun convert(model: BookItemResponse): BookItem? {
-
         if (model.volumeInfo == null)
             return null
 

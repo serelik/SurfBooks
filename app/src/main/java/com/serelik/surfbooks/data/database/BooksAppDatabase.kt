@@ -11,6 +11,4 @@ import com.serelik.surfbooks.data.database.entities.BookEntity
 )
 abstract class BooksAppDatabase : RoomDatabase() {
     abstract val booksDao: FavoriteBooksDao
-
-    companion object
 }

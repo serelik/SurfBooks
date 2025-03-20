@@ -12,11 +12,8 @@ interface BooksApi {
         @Query("q") query: String
     ): BooksListResponse
 
-
     @GET("volumes/{volumeId}")
     suspend fun getBookByVolumeId(
         @Path("volumeId") volumeId: String,
     ): BookItemResponse
-
-
 }

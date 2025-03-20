@@ -5,8 +5,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.4.21" apply true
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
-    id("kotlin-parcelize")
-
 }
 
 android {
@@ -79,6 +77,4 @@ dependencies {
 
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
-
-
 }
