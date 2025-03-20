@@ -17,12 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.serelik.surfbooks.R
 import com.serelik.surfbooks.ui.common.BookItemUi
 
 @Composable
@@ -53,7 +54,7 @@ fun FavoriteBooksListScreen(
 
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    "Избранное",
+                    stringResource(R.string.favorite_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

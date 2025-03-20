@@ -26,12 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.serelik.surfbooks.R
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.ui.theme.Typography
 import com.skydoves.landscapist.glide.GlideImage
@@ -135,36 +136,41 @@ fun SuccessResult(book: BookItem) {
         fontWeight = FontWeight.Bold
     )
 
-    Text(
-        text = "${book.publishedYear} г.",
-        style = Typography.bodySmall,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 22.dp, top = 8.dp),
-        color = Color.LightGray,
-        textAlign = TextAlign.Center
-    )
-    Card {
+    if (!book.publishedYear.isNullOrBlank()) {
         Text(
-            text = "Описание",
-            style = Typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp, top = 20.dp)
+            text = stringResource(R.string.year_template, book.publishedYear),
+            style = Typography.bodySmall,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 22.dp, top = 8.dp),
+            color = Color.LightGray,
+            textAlign = TextAlign.Center
         )
+    }
 
-        Text(
-            text = book.description,
-            style = Typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-        )
+    if (book.description.isNotBlank()) {
+        Card {
+            Text(
+                text = stringResource(R.string.description_title),
+                style = Typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp, top = 20.dp)
+            )
+
+            Text(
+                text = book.description,
+                style = Typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+            )
+        }
     }
 }
 
 @Composable
 fun UiStateHandler(uiState: BookDetailsUiState) {
     when (uiState) {
-        BookDetailsUiState.Error -> ErrorSearch("backend sent not all info")
+        BookDetailsUiState.Error -> ErrorSearch(stringResource(R.string.search_error))
         BookDetailsUiState.Loading -> Loader()
         is BookDetailsUiState.Result -> SuccessResult(uiState.bookItem)
     }

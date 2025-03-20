@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -102,10 +103,10 @@ fun UiStateHandler(
     onRetryClick: () -> Unit
 ) {
     when (uiState) {
-        BookSearchUiState.EmptyQuery -> EmptyQuery("Введите название книги, которую ищете")
-        BookSearchUiState.EmptyResult -> EmptyResult("По вашему запросу ничего не найдено")
+        BookSearchUiState.EmptyQuery -> EmptyQuery(stringResource(R.string.empty_query_message))
+        BookSearchUiState.EmptyResult -> EmptyResult(stringResource(R.string.not_found))
         BookSearchUiState.Error -> ErrorSearch(
-            "Ошибка выполнения запроса, попробуйте повторить",
+            stringResource(R.string.search_error),
             onRetryClick
         )
 
@@ -184,7 +185,7 @@ fun ErrorSearch(message: String, onRetryClick: () -> Unit) {
                 vertical = 10.dp,
                 horizontal = 22.dp
             ),
-        ) { Text("Попробовать еще") }
+        ) { Text(stringResource(R.string.retry)) }
     }
 }
 

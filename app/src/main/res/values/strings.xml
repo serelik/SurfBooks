@@ -2,4 +2,11 @@
     <string name="app_name">SurfBooks</string>
     <string name="search_screen_route">Search</string>
     <string name="favorite_screen_route">Favorite</string>
+    <string name="retry">Попробовать еще</string>
+    <string name="search_error">Ошибка выполнения запроса, попробуйте повторить</string>
+    <string name="not_found"><![CDATA[По вашему запросу ничего не найдено]]></string>
+    <string name="empty_query_message">Введите название книги, которую ищете</string>
+    <string name="favorite_title">Избранное</string>
+    <string name="description_title">Описание</string>
+    <string name="year_template">%1$s г.</string>
 </resources>
