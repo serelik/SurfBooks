@@ -41,6 +41,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun BooksDetailsScreen(
     onBackClick: () -> Unit,
     viewModel: BookDetailsViewModel = hiltViewModel(),
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
     val bookDetailsState = viewModel.bookDetailsStateFlow.collectAsStateWithLifecycle()
     val isBookFavoriteState = viewModel.bookFavoriteStateFlow.collectAsStateWithLifecycle()
@@ -71,7 +72,10 @@ fun BooksDetailsScreen(
             FavoriteIcon(
                 bookState = bookState,
                 isBookFavorite = isBookFavoriteState.value,
-                onFavoriteClick = viewModel::onFavoriteClick
+                onFavoriteClick = {
+                    onFavoriteClickSnackBar(isBookFavoriteState.value)
+                    viewModel.onFavoriteClick(it)
+                }
             )
         }
 

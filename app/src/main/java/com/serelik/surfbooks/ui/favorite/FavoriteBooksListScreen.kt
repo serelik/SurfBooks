@@ -30,7 +30,8 @@ import com.serelik.surfbooks.ui.common.BookItemUi
 fun FavoriteBooksListScreen(
     viewModel: FavoriteListViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    onItemClick: (id: String) -> Unit
+    onItemClick: (id: String) -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
 
     val uiState = viewModel.favoriteBooksStateFlow.collectAsStateWithLifecycle(emptyList())
@@ -65,6 +66,7 @@ fun FavoriteBooksListScreen(
             books = uiState.value,
             onItemClick = onItemClick,
             onFavoriteClick = viewModel::onFavoriteClick,
+            onFavoriteClickSnackBar = onFavoriteClickSnackBar,
         )
     }
 }
@@ -74,6 +76,7 @@ fun SuccessResult(
     books: List<BookItemUiModel>,
     onItemClick: (id: String) -> Unit,
     onFavoriteClick: (book: BookItemUiModel) -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
     LazyVerticalGrid(
         GridCells.Fixed(2),
@@ -84,7 +87,10 @@ fun SuccessResult(
     ) {
 
         items(books) {
-            BookItemUi(it, onItemClick, onFavoriteClick)
+            BookItemUi(
+                it, onItemClick, onFavoriteClick,
+                onFavoriteClickSnackBar = onFavoriteClickSnackBar
+            )
         }
     }
 }

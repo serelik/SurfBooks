@@ -1,6 +1,5 @@
 package com.serelik.surfbooks.ui.search
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -42,9 +40,12 @@ import com.serelik.surfbooks.ui.favorite.BookItemUiModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BooksListScreen(
-    viewModel: BookSearchViewModel = hiltViewModel(),
-    onItemClick: (id: String) -> Unit
+    onItemClick: (id: String) -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
+
+    val viewModel: BookSearchViewModel = hiltViewModel()
+
     val uiState = viewModel.booksStateFlow.collectAsStateWithLifecycle()
     val queryState = viewModel.searchQuery.collectAsStateWithLifecycle()
 
@@ -92,7 +93,8 @@ fun BooksListScreen(
             uiState.value,
             onItemClick,
             viewModel::onFavoriteClick,
-            viewModel::retrySearch
+            viewModel::retrySearch,
+            onFavoriteClickSnackBar = onFavoriteClickSnackBar
         )
     }
 }
@@ -102,7 +104,8 @@ fun UiStateHandler(
     uiState: BookSearchUiState,
     onItemClick: (id: String) -> Unit,
     onFavoriteClick: (book: BookItemUiModel) -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
     when (uiState) {
         BookSearchUiState.EmptyQuery -> EmptyQuery(stringResource(R.string.empty_query_message))
@@ -114,7 +117,8 @@ fun UiStateHandler(
 
         BookSearchUiState.Loading -> Loader()
         is BookSearchUiState.Result -> SuccessResult(
-            uiState.bookList, onItemClick, onFavoriteClick
+            uiState.bookList, onItemClick, onFavoriteClick,
+            onFavoriteClickSnackBar = onFavoriteClickSnackBar
         )
     }
 }
@@ -124,6 +128,7 @@ fun SuccessResult(
     books: List<BookItemUiModel>,
     onItemClick: (id: String) -> Unit,
     onFavoriteClick: (book: BookItemUiModel) -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
     LazyVerticalGrid(
         GridCells.Fixed(2),
@@ -137,7 +142,8 @@ fun SuccessResult(
             BookItemUi(
                 bookItemUiModel = it,
                 onItemClick = onItemClick,
-                onFavoriteClick = onFavoriteClick
+                onFavoriteClick = onFavoriteClick,
+                onFavoriteClickSnackBar = onFavoriteClickSnackBar,
             )
         }
     }

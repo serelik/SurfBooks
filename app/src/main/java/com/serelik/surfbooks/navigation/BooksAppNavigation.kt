@@ -8,14 +8,18 @@ import com.serelik.moviedbcompose.navigation.destination.toFavoriteList
 import com.serelik.moviedbcompose.navigation.destination.toSearchList
 
 @Composable
-fun BooksAppNavigation(navController: NavHostController) {
+fun BooksAppNavigation(
+    navController: NavHostController,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
+) {
     NavHost(navController = navController, startDestination = "Поиск") {
         this.toSearchList(
-            navController
+            navController,
+            onFavoriteClickSnackBar
         )
 
-        this.toDetailsList(onBackClick = navController::popBackStack)
+        this.toDetailsList(onBackClick = navController::popBackStack, onFavoriteClickSnackBar)
 
-        this.toFavoriteList(navController)
+        this.toFavoriteList(navController, onFavoriteClickSnackBar)
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +30,11 @@ fun BookItemUi(
     bookItemUiModel: BookItemUiModel,
     onItemClick: (id: String) -> Unit,
     onFavoriteClick: (book: BookItemUiModel) -> Unit,
+    onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
+
+    val scope = rememberCoroutineScope()
+
     val bookItem = bookItemUiModel.bookItem
     Column(
         modifier = Modifier
@@ -62,7 +67,10 @@ fun BookItemUi(
                         .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
                         .padding(6.dp)
                         .clickable {
+                            onFavoriteClickSnackBar(bookItemUiModel.isFavorite)
                             onFavoriteClick(bookItemUiModel)
+
+
                         }
                 )
             }
