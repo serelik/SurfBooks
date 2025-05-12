@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.serelik.moviedbcompose.navigation.destination.ID_KEY
+import com.serelik.surfbooks.R
 import com.serelik.surfbooks.domain.models.BookItem
 import com.serelik.surfbooks.domain.repository.BookRepository
 import com.serelik.surfbooks.domain.repository.FavoriteBookRepository
@@ -29,7 +30,7 @@ class BookDetailsViewModel @Inject constructor(
     val bookFavoriteStateFlow = _bookFavoriteStateFlow.asStateFlow()
 
     private val bookId: String =
-        savedStateHandle.get<String>(ID_KEY) ?: error("movieId must be not null")
+        savedStateHandle.get<String>(ID_KEY) ?: error(R.string.bookid_not_found)
 
     init {
         getBook()

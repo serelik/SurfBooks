@@ -9,4 +9,7 @@
     <string name="favorite_title">Избранное</string>
     <string name="description_title">Описание</string>
     <string name="year_template">%1$s г.</string>
+    <string name="bookid_not_found">bookId must be not null</string>
+    <string name="favorite_description">favorite</string>
+    <string name="search_route">Поиск</string>
 </resources>

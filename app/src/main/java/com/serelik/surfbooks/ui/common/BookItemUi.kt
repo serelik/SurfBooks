@@ -15,12 +15,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.serelik.surfbooks.R
 import com.serelik.surfbooks.ui.favorite.BookItemUiModel
 import com.serelik.surfbooks.ui.theme.Typography
 import com.skydoves.landscapist.glide.GlideImage
@@ -32,8 +33,6 @@ fun BookItemUi(
     onFavoriteClick: (book: BookItemUiModel) -> Unit,
     onFavoriteClickSnackBar: (isFavorite: Boolean) -> Unit
 ) {
-
-    val scope = rememberCoroutineScope()
 
     val bookItem = bookItemUiModel.bookItem
     Column(
@@ -60,7 +59,7 @@ fun BookItemUi(
                 Icon(
                     imageVector = Icons.Filled.Favorite,
                     tint = color,
-                    contentDescription = "favorite",
+                    contentDescription = stringResource(R.string.favorite_description),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(top = 6.dp, end = 10.dp)
