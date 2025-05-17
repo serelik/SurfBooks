@@ -8,5 +8,5 @@ data class BooksListResponse(
     @SerialName("totalItems")
     val totalItems: Int,
     @SerialName("items")
-    val items: List<BookItemResponse>?
+    val items: List<BookItemResponse>? = null
 )
