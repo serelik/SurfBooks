@@ -1,12 +1,11 @@
 package com.serelik.surfbooks.ui.common
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,19 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -68,7 +63,7 @@ fun BookItemUi(
                 }
 
                 val size: Dp by animateDpAsState(
-                    if (bookItemUiModel.isFavorite) 24.dp else 0.dp
+                    if (bookItemUiModel.isFavorite) 24.dp else 0.dp,
                 )
 
                 Box(
@@ -85,28 +80,10 @@ fun BookItemUi(
 
                 ) {
 
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        tint = Color.LightGray,
-                        contentDescription = stringResource(R.string.favorite_description),
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(top = 6.dp, end = 10.dp)
-                            .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
-                            .padding(6.dp)
+                    AnimatedIcon()
 
-                    )
+                    AnimatedIcon(size, Color.Red, Color.Transparent)
 
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        tint = Color.Red,
-                        contentDescription = stringResource(R.string.favorite_description),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(top = 6.dp, end = 10.dp)
-                            .padding(6.dp)
-                            .size(size)
-                    )
 
                 }
             }
@@ -124,4 +101,23 @@ fun BookItemUi(
             style = Typography.bodyLarge,
         )
     }
+}
+
+@Composable
+fun BoxScope.AnimatedIcon(
+    size: Dp = 24.dp,
+    heartColor: Color = Color.LightGray,
+    backgroundColor: Color = Color.White
+) {
+    Icon(
+        imageVector = Icons.Filled.Favorite,
+        tint = heartColor,
+        contentDescription = stringResource(R.string.favorite_description),
+        modifier = Modifier
+            .align(Alignment.Center)
+            .padding(top = 6.dp, end = 10.dp)
+            .background(color = backgroundColor, shape = ShapeDefaults.ExtraLarge)
+            .padding(6.dp)
+            .size(size)
+    )
 }

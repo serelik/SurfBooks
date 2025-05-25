@@ -1,15 +1,19 @@
 package com.serelik.surfbooks.ui.details
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,14 +25,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,7 +59,9 @@ fun BooksDetailsScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Row(
+
+
+            Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp, horizontal = 20.dp),
@@ -69,14 +77,32 @@ fun BooksDetailsScreen(
                     }
             )
 
-            FavoriteIcon(
-                bookState = bookState,
-                isBookFavorite = isBookFavoriteState.value,
-                onFavoriteClick = {
-                    onFavoriteClickSnackBar(isBookFavoriteState.value)
-                    viewModel.onFavoriteClick(it)
+            if (bookState is BookDetailsUiState.Result) {
+
+                val size: Dp by animateDpAsState(
+                    if (isBookFavoriteState.value) 24.dp else 0.dp,
+                )
+
+                Box(
+                    Modifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+
+                            onFavoriteClickSnackBar(isBookFavoriteState.value)
+                            viewModel.onFavoriteClick(bookState.bookItem)
+                        }
+
+                ) {
+
+                    AnimatedIcon()
+
+                    AnimatedIcon(size, Color.Red, Color.Transparent)
+
+
                 }
-            )
+            }
         }
 
         UiStateHandler(bookState)
@@ -84,27 +110,22 @@ fun BooksDetailsScreen(
 }
 
 @Composable
-fun FavoriteIcon(
-    bookState: BookDetailsUiState,
-    isBookFavorite: Boolean,
-    onFavoriteClick: (BookItem) -> Unit
+fun BoxScope.AnimatedIcon(
+    size: Dp = 24.dp,
+    heartColor: Color = Color.LightGray,
+    backgroundColor: Color = Color.White
 ) {
-    if (bookState !is BookDetailsUiState.Result)
-        return
-
-    val color = if (isBookFavorite) Color.Red else Color.LightGray
-
     Icon(
         imageVector = Icons.Filled.Favorite,
-        tint = color,
-        contentDescription = "favorite",
+        tint = heartColor,
+        contentDescription = stringResource(R.string.favorite_description),
         modifier = Modifier
-            .shadow(shape = ShapeDefaults.ExtraLarge, elevation = 10.dp)
-            .background(color = Color.White, shape = ShapeDefaults.ExtraLarge)
+            .align(Alignment.Center)
+            .padding(top = 6.dp, end = 10.dp)
+            .background(color = backgroundColor, shape = ShapeDefaults.ExtraLarge)
             .padding(6.dp)
-            .clickable {
-                onFavoriteClick(bookState.bookItem)
-            }
+            .size(size)
+
     )
 }
 
